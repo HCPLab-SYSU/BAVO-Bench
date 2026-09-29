@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recovering the View: Benchmarking Physical Active Vision for Occlusion Recovery in Robotic Manipulation</title>
+  <meta name="description" content="A bimanual active-vision benchmark for occlusion recovery and A-FAR, a future-aware policy for joint viewpoint and manipulation control.">
+  <meta name="author" content="Kaijun Luo, Yudi Huang, Qijun Zhong, Xinshuai Song, Yang Liu, Liang Lin">
+  <meta name="keywords" content="physical active vision, occlusion recovery, robotic manipulation, bimanual manipulation, A-FAR">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Recovering the View: Benchmarking Physical Active Vision for Occlusion Recovery in Robotic Manipulation">
+  <meta property="og:description" content="A bimanual active-vision benchmark for occlusion recovery and A-FAR, a future-aware policy for joint viewpoint and manipulation control.">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Recovering the View: Benchmarking Physical Active Vision for Occlusion Recovery in Robotic Manipulation">
+  <meta name="twitter:description" content="A bimanual active-vision benchmark for occlusion recovery and A-FAR, a future-aware policy for joint viewpoint and manipulation control.">
+  <meta name="citation_title" content="Recovering the View: Benchmarking Physical Active Vision for Occlusion Recovery in Robotic Manipulation">
+  <meta name="citation_author" content="Luo, Kaijun">
+  <meta name="citation_author" content="Huang, Yudi">
+  <meta name="citation_author" content="Zhong, Qijun">
+  <meta name="citation_author" content="Song, Xinshuai">
+  <meta name="citation_author" content="Liu, Yang">
+  <meta name="citation_author" content="Lin, Liang">
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script defer src="static/js/rollouts.js"></script>
+  <script defer src="static/js/real-rollouts.js"></script>
+  <style>
+    .publication-title { max-width: 1080px; margin: 0 auto 2rem !important; }
+    .publication-authors { line-height: 2; }
+    .affiliations { color: var(--text-secondary); line-height: 1.8; }
+    .affiliations .affiliation { display: block; }
+    .affiliations .affiliation-group { display: flex; justify-content: center; flex-wrap: wrap; column-gap: 1.75rem; }
+    .affiliations .affiliation-group .affiliation { display: inline-block; }
+    .corresponding-author { color: var(--text-secondary); margin-top: .5rem; }
+    .abstract-section { min-height: 16rem; }
+    .abstract-section .content { font-size: 1.1rem; line-height: 1.8; }
+    .research-figure { margin: 0 auto; max-width: 1200px; }
+    .research-figure img { display: block; width: 100%; height: auto; }
+    .research-figure figcaption { color: var(--text-secondary); margin-top: 1rem; line-height: 1.7; text-align: left; }
+    .figure-section .hero-body { padding-top: 3rem; padding-bottom: 3rem; }
+    .figure-section .title { margin-bottom: 1.75rem; }
+    .rollouts-section { border-top: 1px solid var(--border-color); }
+    .rollouts-section .hero-body { padding-top: 3.5rem; padding-bottom: 4rem; }
+    .rollout-intro { max-width: 800px; margin: 0 auto 2rem; color: var(--text-secondary); }
+    .rollout-controls { max-width: 900px; margin: 0 auto 1.5rem; }
+    .rollout-control-label { display: block; margin: 1.25rem 0 .6rem; font-size: .82rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-secondary); }
+    .rollout-button-row { display: flex; flex-wrap: wrap; gap: .55rem; }
+    .rollout-button { border: 1px solid var(--border-color); border-radius: 999px; background: white; color: var(--text-primary); padding: .55rem .9rem; font: inherit; font-size: .92rem; font-weight: 600; cursor: pointer; transition: background-color .2s, color .2s, border-color .2s; }
+    .rollout-button:hover { border-color: var(--primary-color); color: var(--primary-color); }
+    .rollout-button[aria-pressed="true"] { background: var(--text-primary); border-color: var(--text-primary); color: white; }
+    .rollout-button:focus-visible { outline: 3px solid var(--primary-color); outline-offset: 3px; }
+    .rollout-panel { max-width: 800px; margin: 0 auto; padding: 1.25rem; border: 1px solid var(--border-color); border-radius: var(--border-radius-lg); background: var(--background-secondary); box-shadow: var(--shadow-md); }
+    .rollout-panel h3 { margin-bottom: .2rem !important; }
+    .rollout-summary { color: var(--text-secondary); margin-bottom: 1.1rem; }
+    .rollout-view-labels { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-bottom: .45rem; font-size: .8rem; font-weight: 700; color: var(--text-secondary); text-align: center; }
+    .rollout-player { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; border-radius: .6rem; background: #111827; }
+    .rollout-condition-note { margin: 1rem 0 0; color: var(--text-secondary); line-height: 1.6; }
+    .real-rollouts-section { border-top: 1px solid var(--border-color); }
+    .real-rollouts-section .hero-body { padding-top: 3.5rem; padding-bottom: 4rem; }
+    .real-rollout-intro { max-width: 760px; margin: 0 auto 2rem; color: var(--text-secondary); }
+    .real-task-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; max-width: 960px; margin: 0 auto 1.25rem; }
+    .real-condition-controls { max-width: 960px; margin: 0 auto 1.5rem; }
+    .real-task-card { display: block; width: 100%; padding: 0; overflow: hidden; border: 2px solid var(--border-color); border-radius: var(--border-radius); background: white; color: var(--text-primary); text-align: left; font: inherit; font-weight: 700; cursor: pointer; transition: border-color .2s, box-shadow .2s, transform .2s; }
+    .real-task-card:hover { border-color: var(--primary-color); transform: translateY(-2px); }
+    .real-task-card[aria-pressed="true"] { border-color: var(--primary-color); box-shadow: 0 0 0 2px var(--primary-color); }
+    .real-task-card:focus-visible { outline: 3px solid var(--primary-color); outline-offset: 3px; }
+    .real-task-card img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+    .real-task-card span { display: block; padding: .7rem .9rem; }
+    .real-player-panel { max-width: 960px; margin: 0 auto; padding: 1.25rem; border: 1px solid var(--border-color); border-radius: var(--border-radius-lg); background: var(--background-secondary); box-shadow: var(--shadow-md); }
+    .real-player-panel h3 { margin-bottom: .3rem !important; }
+    .real-player-panel p { color: var(--text-secondary); margin-bottom: 1rem; }
+    .real-rollout-player { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: .6rem; background: #111827; }
+    @media (max-width: 600px) {
+      .rollout-panel { padding: .75rem; }
+      .rollout-button { font-size: .82rem; padding: .5rem .75rem; }
+      .rollout-view-labels { font-size: .7rem; }
+      .real-task-grid { grid-template-columns: 1fr; gap: .7rem; }
+      .real-task-card { display: grid; grid-template-columns: 120px 1fr; align-items: center; }
+      .real-player-panel { padding: .75rem; }
+    }
+    .footer { font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero publication-header">
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <h1 class="title is-1 publication-title">Recovering the View: Benchmarking Physical Active Vision for Occlusion Recovery in Robotic Manipulation</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><a href="https://github.com/Keith-Luo">Kaijun Luo</a><sup>1</sup>,</span>
+            <span class="author-block">Yudi Huang<sup>2</sup>,</span>
+            <span class="author-block"><a href="https://github.com/gaigebell">Qijun Zhong</a><sup>1</sup>,</span>
+            <span class="author-block">Xinshuai Song<sup>1</sup>,</span>
+            <span class="author-block"><a href="https://yangliu9208.github.io/">Yang Liu</a><sup>1,4†</sup>,</span>
+            <span class="author-block"><a href="http://www.linliang.net/">Liang Lin</a><sup>1,3,4</sup></span>
+          </div>
+          <div class="is-size-5 affiliations">
+            <span class="affiliation"><sup>1</sup> Sun Yat-sen University</span>
+            <span class="affiliation"><sup>2</sup> University of Electronic Science and Technology of China</span>
+            <span class="affiliation-group">
+              <span class="affiliation"><sup>3</sup> Pengcheng Laboratory</span>
+              <span class="affiliation"><sup>4</sup> X-Era AI Lab</span>
+            </span>
+          </div>
+          <p class="corresponding-author"><sup>†</sup> Corresponding author</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero figure-section" aria-label="Research overview">
+      <div class="hero-body">
+        <div class="container">
+          <figure class="research-figure has-text-centered">
+            <img src="static/images/intro.png" alt="Overview of physical active vision, the bimanual benchmark, and the A-FAR recovery policy" width="1835" height="497">
+            <figcaption><strong>Overview of our motivation, benchmark, and approach.</strong> <strong>(a)</strong> We study physical active vision as closed-loop recovery from external occlusion: using a single active camera as the sole visual sensor, the robot actively changes its viewpoint to recover task-relevant visibility and continue manipulation. <strong>(b)</strong> We introduce <strong>BAVO-Bench</strong>, a bimanual active-vision manipulation benchmark that systematically introduces controlled external occlusions to study viewpoint recovery, together with a VR teleoperation pipeline for collecting active-view demonstrations. <strong>(c)</strong> We present <strong>A-FAR</strong>, an active-vision policy that canonicalizes moving-view observations in robot-centric 3D and distills D4RT's 4D relational priors, enabling stable, future-aware control under active viewpoint changes.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section hero is-light abstract-section" id="abstract">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3 has-text-centered">Abstract</h2>
+            <div class="content has-text-justified">
+              <p>Physical active vision allows robots to change their viewpoint when task-relevant observations become unreliable, yet existing manipulation benchmarks provide limited support for studying how policies recover from occlusion during execution. We introduce <strong>BAVO-Bench (Bimanual Active Vision under Occlusion)</strong>, a bimanual active-vision benchmark that systematically controls external visibility through Clean, Stage Occlusion, and Random-time Occlusion conditions, enabling evaluation of both manipulation performance and active visual recovery. Building on this setting, we present <strong>A-FAR (Active Future-Aware Recovery)</strong>, an active-vision policy for joint viewpoint and manipulation control. A-FAR represents moving-camera observations in a unified robot-centric 3D frame and distills relational structure together with its future evolution from a pretrained 4D model, providing the policy with future-aware geometric guidance without requiring future observations at deployment. Experiments across multiple bimanual manipulation tasks show that A-FAR improves robustness to both structured and temporally shifted occlusions while maintaining strong performance under clean observations.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero figure-section" id="benchmark">
+      <div class="hero-body">
+        <div class="container">
+          <h2 class="title is-3 has-text-centered">Benchmark</h2>
+          <figure class="research-figure has-text-centered">
+            <img src="static/images/benchmark.png" alt="Five bimanual manipulation tasks and examples of stage and random-time occlusion" width="1490" height="1032" loading="lazy" decoding="async">
+            <figcaption><strong>BAVO-Bench overview.</strong> <strong>Top:</strong> Five multi-stage bimanual manipulation tasks. <strong>Bottom:</strong> Representative rollouts under the two occlusion settings. Red-bordered frames mark occlusion events, and the timelines illustrate recovery and manipulation behaviors. Both settings occlude task-relevant targets; <strong>Stage Occlusion</strong> aligns interventions with predefined task transitions, whereas <strong>Random-time Occlusion</strong> samples intervention times independently of these transitions.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero is-light figure-section" id="method">
+      <div class="hero-body">
+        <div class="container">
+          <h2 class="title is-3 has-text-centered">A-FAR</h2>
+          <figure class="research-figure has-text-centered">
+            <img src="static/images/method.png" alt="A-FAR architecture with robot-centric 3D observations, a training-only 4D teacher, and a future-aware action policy" width="1864" height="856" loading="lazy" decoding="async">
+            <figcaption><strong>Overview of A-FAR.</strong> Current RGB-D observations are canonicalized into a robot-base point cloud and encoded as current point tokens <i>H</i><sub>t</sub>. A state-conditioned WorldQueryFormer predicts future relational tokens <i>H&#770;</i><sub>t</sub><sup>F</sup>, which are fused with the current representation for ManiFlow action generation. During training, a frozen D4RT teacher queries the same source points at current and future target times to construct relational targets that supervise the current structure (ℒ<sub>cur</sub>) and its temporal evolution (ℒ<sub>evo</sub>). The teacher branch and future frames are removed at deployment.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero rollouts-section" id="simulation-rollouts">
+      <div class="hero-body">
+        <div class="container">
+          <h2 class="title is-3 has-text-centered">Simulation Rollouts</h2>
+          <p class="rollout-intro has-text-centered">Explore the five BAVO-Bench tasks under clean observations, stage-aligned occlusion, and randomly timed occlusion. Each video shows the third-person scene and the active-camera view side by side.</p>
+
+          <div class="rollout-controls">
+            <span class="rollout-control-label">Task</span>
+            <div class="rollout-button-row" role="group" aria-label="Choose a simulation task">
+              <button class="rollout-button" type="button" data-rollout-task="cube_transfer_plate" aria-pressed="true">Cube Handoff</button>
+              <button class="rollout-button" type="button" data-rollout-task="block_stack" aria-pressed="false">Block Stacking</button>
+              <button class="rollout-button" type="button" data-rollout-task="drawer_storage" aria-pressed="false">Drawer Stowing</button>
+              <button class="rollout-button" type="button" data-rollout-task="slide_pickup" aria-pressed="false">Slide Retrieval</button>
+              <button class="rollout-button" type="button" data-rollout-task="dustpan_sweep" aria-pressed="false">Dustpan Sweeping</button>
+            </div>
+            <span class="rollout-control-label">Visibility condition</span>
+            <div class="rollout-button-row" role="group" aria-label="Choose a visibility condition">
+              <button class="rollout-button" type="button" data-rollout-condition="clean" aria-pressed="false">Clean</button>
+              <button class="rollout-button" type="button" data-rollout-condition="stage" aria-pressed="false">Stage Occlusion</button>
+              <button class="rollout-button" type="button" data-rollout-condition="random" aria-pressed="true">Random-time Occlusion</button>
+            </div>
+          </div>
+
+          <div class="rollout-panel">
+            <h3 class="title is-4" id="rollout-title">Cube Handoff</h3>
+            <p class="rollout-summary" id="rollout-summary">Handoff a cube between arms and place it on the target plate.</p>
+            <div class="rollout-view-labels" aria-hidden="true"><span>Third-person scene</span><span>Active-camera view</span></div>
+            <video class="rollout-player" id="rollout-player" controls playsinline preload="none" poster="static/images/rollouts/cube_transfer_plate_random.jpg" width="512" height="256" aria-label="Cube Handoff under Random-time Occlusion, with third-person and active-camera views">
+              <source id="rollout-source" src="static/videos/cube_transfer_plate_random.mp4" type="video/mp4">
+              Your browser does not support MP4 video.
+            </video>
+            <p class="rollout-condition-note" id="rollout-condition-note" aria-live="polite">Random-time Occlusion introduces visibility disruptions at sampled times during task execution.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero figure-section" id="deployment">
+      <div class="hero-body">
+        <div class="container">
+          <h2 class="title is-3 has-text-centered">Physical Deployment</h2>
+          <figure class="research-figure has-text-centered">
+            <img src="static/images/deploy.png" alt="Four frames showing a physical robot manipulation sequence" width="1471" height="284" loading="lazy" decoding="async">
+            <figcaption><strong>Real-world deployment of A-FAR.</strong> Representative rollout under an externally introduced occlusion. From left to right, task-relevant visibility is disrupted during execution, the active camera changes viewpoint to recover the scene, and manipulation proceeds after the target region becomes observable again. The sequence demonstrates closed-loop active-view behavior on our physical manipulation platform.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero real-rollouts-section" id="physical-rollouts">
+      <div class="hero-body">
+        <div class="container">
+          <h2 class="title is-3 has-text-centered">Physical Robot Rollouts</h2>
+          <p class="real-rollout-intro has-text-centered">Watch three physical robot tasks with or without an externally introduced occlusion.</p>
+
+          <div class="real-task-grid" role="group" aria-label="Choose a physical robot task">
+            <button class="real-task-card" type="button" data-real-task="button_pressing" aria-pressed="false">
+              <img src="static/images/rollouts/real_button_pressing_occlusion.jpg" alt="Button pressing rollout preview" width="1280" height="720" loading="lazy">
+              <span>Button Pressing</span>
+            </button>
+            <button class="real-task-card" type="button" data-real-task="pepper_picking" aria-pressed="false">
+              <img src="static/images/rollouts/real_pepper_picking_occlusion.jpg?v=14s" alt="Pepper picking rollout preview" width="1280" height="720" loading="lazy">
+              <span>Pepper Picking</span>
+            </button>
+            <button class="real-task-card" type="button" data-real-task="rack_cleaning" aria-pressed="true">
+              <img src="static/images/rollouts/real_rack_cleaning_occlusion.jpg" alt="Rack cleaning rollout preview" width="1280" height="720" loading="lazy">
+              <span>Rack Cleaning</span>
+            </button>
+          </div>
+
+          <div class="real-condition-controls">
+            <span class="rollout-control-label">Rollout</span>
+            <div class="rollout-button-row" role="group" aria-label="Choose a physical robot rollout">
+              <button class="rollout-button" type="button" data-real-condition="occlusion" aria-pressed="true">Occlusion recovery</button>
+              <button class="rollout-button" type="button" data-real-condition="clean" aria-pressed="false">Clean</button>
+            </div>
+          </div>
+
+          <div class="real-player-panel">
+            <h3 class="title is-4" id="real-rollout-title">Rack Cleaning</h3>
+            <p id="real-rollout-description" aria-live="polite">A physical robot rollout with an externally introduced occlusion.</p>
+            <video class="real-rollout-player" id="real-rollout-player" controls playsinline preload="none" poster="static/images/rollouts/real_rack_cleaning_occlusion.jpg" width="1280" height="720" aria-label="Rack Cleaning physical robot rollout with occlusion">
+              <source id="real-rollout-source" src="static/videos/real_rack_cleaning_occlusion.mp4" type="video/mp4">
+              Your browser does not support MP4 video.
+            </video>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container is-max-desktop">
+      <div class="content has-text-centered">
+        <p>Page template: <a href="https://github.com/eliahuhorwitz/Academic-project-page-template">Academic Project Page Template</a>, adapted from the <a href="https://nerfies.github.io">Nerfies</a> project page.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
