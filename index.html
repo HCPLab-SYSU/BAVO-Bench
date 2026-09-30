@@ -26,6 +26,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script defer src="static/js/rollouts.js"></script>
   <script defer src="static/js/real-rollouts.js"></script>
+  <script defer src="static/js/bibtex.js"></script>
   <style>
     .publication-title { max-width: 1080px; margin: 0 auto 2rem !important; }
     .publication-authors { line-height: 2; }
@@ -258,6 +259,24 @@
             </video>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="section" id="bibtex">
+      <div class="container is-max-desktop content">
+        <div class="bibtex-header">
+          <h2 class="title is-3">BibTeX</h2>
+          <button class="copy-bibtex-btn" id="copy-bibtex" type="button" aria-live="polite">Copy BibTeX</button>
+        </div>
+        <pre id="bibtex-code"><code>@misc{luo2026recoveringviewbenchmarkingphysical,
+  title={Recovering the View: Benchmarking Physical Active Vision for Occlusion Recovery in Robotic Manipulation},
+  author={Kaijun Luo and Yudi Huang and Qijun Zhong and Xinshuai Song and Yang Liu and Liang Lin},
+  year={2026},
+  eprint={2609.37292},
+  archivePrefix={arXiv},
+  primaryClass={cs.RO},
+  url={https://arxiv.org/abs/2609.37292},
+}</code></pre>
       </div>
     </section>
   </main>

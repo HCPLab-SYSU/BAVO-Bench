@@ -4,6 +4,8 @@ The project page is `index.html`. It includes the title, authors, affiliations, 
 
 The public paper is available at https://arxiv.org/abs/2609.37292 and the code repository is https://github.com/HCPLab-SYSU/BAVO-Bench.
 
+The page includes the paper's arXiv BibTeX entry with a copy button.
+
 ## Add figures
 
 The source PDFs and their web-ready PNGs are in `static/images/`:
