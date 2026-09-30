@@ -2,6 +2,8 @@
 
 The project page is `index.html`. It includes the title, authors, affiliations, abstract, four research figures, an interactive simulation rollout browser, and a physical robot video demo. No venue or submission status is shown.
 
+The public paper is available at https://arxiv.org/abs/2609.37292 and the code repository is https://github.com/HCPLab-SYSU/BAVO-Bench.
+
 ## Add figures
 
 The source PDFs and their web-ready PNGs are in `static/images/`:

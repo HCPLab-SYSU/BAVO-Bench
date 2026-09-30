@@ -20,6 +20,7 @@
   <meta name="citation_author" content="Song, Xinshuai">
   <meta name="citation_author" content="Liu, Yang">
   <meta name="citation_author" content="Lin, Liang">
+  <meta name="citation_arxiv_id" content="2609.37292">
   <link rel="stylesheet" href="static/css/bulma.min.css">
   <link rel="stylesheet" href="static/css/index.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -33,6 +34,9 @@
     .affiliations .affiliation-group { display: flex; justify-content: center; flex-wrap: wrap; column-gap: 1.75rem; }
     .affiliations .affiliation-group .affiliation { display: inline-block; }
     .corresponding-author { color: var(--text-secondary); margin-top: .5rem; }
+    .project-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; margin-top: 1.5rem; }
+    .project-links .button { min-width: 8.5rem; display: inline-flex; align-items: center; gap: .55rem; }
+    .project-links .button svg { width: 1.1rem; height: 1.1rem; flex: none; }
     .abstract-section { min-height: 16rem; }
     .abstract-section .content { font-size: 1.1rem; line-height: 1.8; }
     .research-figure { margin: 0 auto; max-width: 1200px; }
@@ -105,6 +109,16 @@
             </span>
           </div>
           <p class="corresponding-author"><sup>†</sup> Corresponding author</p>
+          <nav class="project-links" aria-label="Paper and Github">
+            <a class="button is-dark is-rounded" href="https://arxiv.org/abs/2609.37292" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg>
+              <span>Paper</span>
+            </a>
+            <a class="button is-dark is-rounded" href="https://github.com/HCPLab-SYSU/BAVO-Bench" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.06-.48.06-.48.8.06 1.22.82 1.22.82.71 1.21 1.87.86 2.33.66.07-.51.28-.86.51-1.06-1.77-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.6 7.6 0 0 1 8 3.47c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              <span>Github</span>
+            </a>
+          </nav>
         </div>
       </div>
     </section>
