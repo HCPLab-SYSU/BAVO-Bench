@@ -1,0 +1,36 @@
+<mujoco model="drawer storage random occlusion task">
+    <include file="../../scene.xml" />
+    <worldbody>
+        <body name="cabinet" pos="0 0.24 0">
+            <geom name="cabinet_bottom" size="0.12 0.09 0.008" pos="0 0 0.008" type="box" solref="0.01" rgba="0.1 0.4 1 1" />
+            <geom name="cabinet_top" size="0.12 0.09 0.008" pos="0 0 0.152" type="box" solref="0.01" rgba="0.1 0.4 1 1" />
+            <geom name="cabinet_left_wall" size="0.008 0.082 0.068" pos="-0.112 0.008 0.08" type="box" solref="0.01" rgba="0.1 0.4 1 1" />
+            <geom name="cabinet_right_wall" size="0.008 0.082 0.068" pos="0.112 0.008 0.08" type="box" solref="0.01" rgba="0.1 0.4 1 1" />
+            <geom name="cabinet_back_wall" size="0.104 0.008 0.068" pos="0 0.082 0.08" type="box" solref="0.01" rgba="0.1 0.4 1 1" />
+            <geom name="drawer_closed_detector" size="0.12 0.002 0.05" pos="0 -0.092 0.077" type="box" contype="0" conaffinity="0" group="3" density="0" rgba="0 0 0 0" />
+            <geom name="drawer_open_detector" size="0.12 0.002 0.05" pos="0 -0.222 0.077" type="box" contype="0" conaffinity="0" group="3" density="0" rgba="0 0 0 0" />
+            <body name="drawer_body" pos="0 -0.01 0.017">
+                <joint name="drawer_slide_joint" pos="0 0 0" axis="0 -1 0" type="slide" limited="true" range="0 0.13" armature="0.02" damping="2" frictionloss="0.5" />
+                <geom name="drawer_bottom" size="0.1 0.075 0.006" pos="0 0 0.006" type="box" friction="0.6" solref="0.01" mass="0.12" rgba="0.65 0.78 0.88 1" />
+                <geom name="drawer_left_wall" size="0.005 0.07 0.03" pos="-0.095 0.005 0.042" type="box" friction="0.6" solref="0.01" mass="0.04" rgba="0.65 0.78 0.88 1" />
+                <geom name="drawer_right_wall" size="0.005 0.07 0.03" pos="0.095 0.005 0.042" type="box" friction="0.6" solref="0.01" mass="0.04" rgba="0.65 0.78 0.88 1" />
+                <geom name="drawer_back_wall" size="0.1 0.005 0.03" pos="0 0.07 0.042" type="box" friction="0.6" solref="0.01" mass="0.04" rgba="0.65 0.78 0.88 1" />
+                <geom name="drawer_front_panel" size="0.12 0.008 0.06" pos="0 -0.075 0.06" type="box" friction="0.6" solref="0.01" mass="0.12" rgba="0.12 0.32 0.68 1" />
+                <geom name="handle_left_mount" size="0.008 0.015 0.01" pos="-0.045 -0.098 0.068" type="box" friction="0.8" solref="0.01" mass="0.01" rgba="0.12 0.12 0.14 1" />
+                <geom name="handle_right_mount" size="0.008 0.015 0.01" pos="0.045 -0.098 0.068" type="box" friction="0.8" solref="0.01" mass="0.01" rgba="0.12 0.12 0.14 1" />
+                <geom name="drawer_handle" size="0.008 0.06" pos="0 -0.115 0.068" quat="0.707107 0 -0.707107 0" type="capsule" friction="0.9" solref="0.01" mass="0.04" rgba="0.12 0.12 0.14 1" />
+            </body>
+        </body>
+        <body name="occluder" pos="0.005 -0.145 0.2857">
+            <geom name="occluder" size="0.04 0.005 0.05" type="box" rgba="0 1 0 1" contype="1" conaffinity="1" />
+        </body>
+        <body name="storage_item_body" pos="-0.16 -0.04 0.045">
+            <joint name="storage_item_joint" type="free" />
+            <geom name="storage_item" size="0.015 0.015 0.04" type="box" friction="0.8" solref="0.01" mass="0.1" rgba="1 1 0.1 1" />
+        </body>
+    </worldbody>
+    <contact>
+        <pair name="drawer_closed_detection" geom1="drawer_front_panel" geom2="drawer_closed_detector" condim="1" margin="0" gap="0.02" />
+        <pair name="drawer_open_detection" geom1="drawer_front_panel" geom2="drawer_open_detector" condim="1" margin="0" gap="0.02" />
+    </contact>
+</mujoco>

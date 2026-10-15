@@ -1,0 +1,20 @@
+<mujoco>
+    <include file="../../scene.xml"/>
+    <worldbody>
+
+        <body name="cube" pos="0 0 0">
+            <joint name="cube_joint" type="free"/>
+            <geom pos="0 0 0.02" size="0.015 0.015 0.015" type="box" name="cube" rgba="1 0 0 1" solref="0.01 1"/>
+        </body>
+
+        <body name="plate" pos="-0.1 0.10 0.003">
+            <geom name="plate" pos="0 0 0" size="0.045 0.003" type="cylinder" rgba="0.1 0.4 1 1" contype="1" conaffinity="1"/>
+            <geom name="plate_target" pos="0 0 0.0016" size="0.02 0.02 0.0015" type="box" rgba="0 1 1 0" contype="1" conaffinity="1"/>
+        </body>
+
+        <body name="occluder" pos="0.005 -0.145 0.2857">
+            <geom name="occluder" size="0.04 0.005 0.05" pos="0 0 0" type="box" rgba="0 1 0 1" contype="1" conaffinity="1"/>
+        </body>
+
+    </worldbody>
+</mujoco>

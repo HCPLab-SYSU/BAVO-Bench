@@ -1,0 +1,17 @@
+<mujoco model="slide pickup task">
+    <include file="../../scene.xml" />
+    <worldbody>
+        <body name="support_platform">
+            <geom name="support_platform" size="0.14 0.14 0.025" pos="0 0.1 0.024" type="box" solref="0.01" rgba="0.1 0.4 1 1" />
+            <geom name="handle_exposure_detector" size="0.002 0.08 0.015" pos="-0.2 0.1 0.06" type="box" contype="0" conaffinity="0" group="3" density="0" rgba="0 0 0 0" />
+        </body>
+        <body name="handled_object_body" pos="0 0.1 0.055">
+            <joint name="handled_object_joint" type="free" />
+            <geom name="object_blade" size="0.07 0.06 0.005" pos="0.045 0 0" type="box" friction="0.6" solref="0.01" mass="0.06" rgba="0.92 0.5 0.08 1" />
+            <geom name="object_handle" size="0.045 0.015 0.003" pos="-0.07 0 -0.002" type="box" friction="0.6" solref="0.01" mass="0.01" rgba="0.38 0.16 0.06 1" />
+        </body>
+    </worldbody>
+    <contact>
+        <pair name="handle_exposure_detection" geom1="object_handle" geom2="handle_exposure_detector" condim="1" margin="0" gap="0.02" />
+    </contact>
+</mujoco>

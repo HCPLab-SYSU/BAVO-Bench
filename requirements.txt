@@ -1,0 +1,34 @@
+# Core environment
+numpy
+gymnasium>=0.29,<1.0
+mujoco==3.5.0
+dm-control==1.0.37
+datasets==3.3.2
+
+# Kinematics and transform helpers
+scipy>=1.10
+numba>=0.60,<0.62
+
+# Visualization and diagnostics
+opencv-python>=4.8
+imageio>=2.34
+imageio-ffmpeg>=0.4.9
+matplotlib>=3.7
+tqdm>=4.66
+termcolor>=2.4
+
+# LeRobot/parquet/zarr conversion utilities
+pyarrow>=15,<20
+zarr>=2.16,<3
+numcodecs>=0.12,<0.16
+
+# Optional VR/data-recording stack:
+# Uncomment these when using bavo_bench/scripts/record_sim_episodes.py
+# or bavo_bench/vr/headset.py. Install torch/torchvision with the
+# wheel index matching your CUDA/CPU setup if the default PyPI wheel is not right.
+# torch
+# torchvision
+# lerobot
+# aiortc
+# av
+# google-cloud-firestore
