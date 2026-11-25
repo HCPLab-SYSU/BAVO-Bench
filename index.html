@@ -129,7 +129,7 @@
         <div class="container">
           <figure class="research-figure has-text-centered">
             <img src="static/images/intro.png" alt="Overview of physical active vision, the bimanual benchmark, and the A-FAR recovery policy" width="1835" height="497">
-            <figcaption><strong>Overview of our motivation, benchmark, and approach.</strong> <strong>(a)</strong> We study physical active vision as closed-loop recovery from external occlusion: using a single active camera as the sole visual sensor, the robot actively changes its viewpoint to recover task-relevant visibility and continue manipulation. <strong>(b)</strong> We introduce <strong>BAVO-Bench</strong>, a bimanual active-vision manipulation benchmark that systematically introduces controlled external occlusions to study viewpoint recovery, together with a VR teleoperation pipeline for collecting active-view demonstrations. <strong>(c)</strong> We present <strong>A-FAR</strong>, an active-vision policy that canonicalizes moving-view observations in robot-centric 3D and distills D4RT's 4D relational priors, enabling stable, future-aware control under active viewpoint changes.</figcaption>
+            <figcaption><strong>Overview of our motivation, benchmark, and approach.</strong> <strong>(a)</strong> We study physical active vision as closed-loop recovery from external occlusion: using a single active camera as the sole visual sensor, the robot actively changes its viewpoint to recover task-relevant visibility and continue manipulation. <strong>(b)</strong> We introduce <strong>BAVO-Bench</strong>, a bimanual active-vision manipulation benchmark that systematically introduces controlled external occlusions to study viewpoint recovery, together with a VR teleoperation pipeline for collecting active-view demonstrations. <strong>(c)</strong> We present <strong>A-FAR</strong>, an active-vision policy that combines viewpoint-stable robot-centric 3D observations with future 3D motion supervision, enabling adaptive viewpoint and manipulation control under occlusion.</figcaption>
           </figure>
         </div>
       </div>
@@ -141,7 +141,7 @@
           <div class="column is-four-fifths">
             <h2 class="title is-3 has-text-centered">Abstract</h2>
             <div class="content has-text-justified">
-              <p>Physical active vision allows robots to change their viewpoint when task-relevant observations become unreliable, yet existing manipulation benchmarks provide limited support for studying how policies recover from occlusion during execution. We introduce <strong>BAVO-Bench (Bimanual Active Vision under Occlusion)</strong>, a bimanual active-vision benchmark that systematically controls external visibility through Clean, Stage Occlusion, and Random-time Occlusion conditions, enabling evaluation of both manipulation performance and active visual recovery. Building on this setting, we present <strong>A-FAR (Active Future-Aware Recovery)</strong>, an active-vision policy for joint viewpoint and manipulation control. A-FAR represents moving-camera observations in a unified robot-centric 3D frame and distills relational structure together with its future evolution from a pretrained 4D model, providing the policy with future-aware geometric guidance without requiring future observations at deployment. Experiments across multiple bimanual manipulation tasks show that A-FAR improves robustness to both structured and temporally shifted occlusions while maintaining strong performance under clean observations.</p>
+              <p>Physical active vision allows robots to change their viewpoint when task-relevant observations become unreliable. However, existing manipulation benchmarks provide limited support for studying how policies recover from occlusion during execution. We introduce <strong>BAVO-Bench</strong>, a bimanual active-vision benchmark that systematically controls external visibility through Clean, Stage Occlusion, and Random-time Occlusion conditions. We further introduce <strong>Camera-attributable Visibility Gain (CVG)</strong>, a counterfactual metric that isolates visibility improvements attributable to camera motion rather than scene dynamics. Building on this setting, we present <strong>A-FAR</strong>, a policy for joint viewpoint and manipulation control. A-FAR combines robot-centric 3D observations with spatial context encoding to model geometric relationships consistently across viewpoints. It further leverages future 3D motion supervision from a pretrained 4D model to capture how task-relevant scene geometry evolves during manipulation. Experiments in simulation and the real world demonstrate improved robustness to structured and temporally unexpected occlusions, while maintaining strong performance under clean observations. Further analyses reveal that recovering visibility alone does not guarantee task success, highlighting the importance of translating recovered visual information into effective manipulation.</p>
             </div>
           </div>
         </div>
@@ -166,7 +166,7 @@
           <h2 class="title is-3 has-text-centered">A-FAR</h2>
           <figure class="research-figure has-text-centered">
             <img src="static/images/method.png" alt="A-FAR architecture with robot-centric 3D observations, a training-only 4D teacher, and a future-aware action policy" width="1864" height="856" loading="lazy" decoding="async">
-            <figcaption><strong>Overview of A-FAR.</strong> Current RGB-D observations are canonicalized into a robot-base point cloud and encoded as current point tokens <i>H</i><sub>t</sub>. A state-conditioned WorldQueryFormer predicts future relational tokens <i>H&#770;</i><sub>t</sub><sup>F</sup>, which are fused with the current representation for ManiFlow action generation. During training, a frozen D4RT teacher queries the same source points at current and future target times to construct relational targets that supervise the current structure (ℒ<sub>cur</sub>) and its temporal evolution (ℒ<sub>evo</sub>). The teacher branch and future frames are removed at deployment.</figcaption>
+            <figcaption><strong>Overview of A-FAR.</strong> RGB-D observations are transformed into robot-base point clouds and encoded by PointNet and a spatial context module. The resulting point tokens, combined with robot states, condition ManiFlow's DiT-X to generate manipulation and viewpoint actions. During training, D4RT provides future 3D point displacement targets, while a motion head predicts these displacements from contextualized point features and demonstrated future actions. The D4RT teacher and auxiliary motion head are removed at inference.</figcaption>
           </figure>
         </div>
       </div>
@@ -214,8 +214,8 @@
         <div class="container">
           <h2 class="title is-3 has-text-centered">Physical Deployment</h2>
           <figure class="research-figure has-text-centered">
-            <img src="static/images/deploy.png" alt="Four frames showing a physical robot manipulation sequence" width="1471" height="284" loading="lazy" decoding="async">
-            <figcaption><strong>Real-world deployment of A-FAR.</strong> Representative rollout under an externally introduced occlusion. From left to right, task-relevant visibility is disrupted during execution, the active camera changes viewpoint to recover the scene, and manipulation proceeds after the target region becomes observable again. The sequence demonstrates closed-loop active-view behavior on our physical manipulation platform.</figcaption>
+            <img src="static/images/real_world_experiment.png" alt="Real-world active-vision platform and Pepper Picking, Button Pressing, and Rack Cleaning under human-introduced occlusions" width="1916" height="684" loading="lazy" decoding="async">
+            <figcaption><strong>Real-world experimental platform and tasks.</strong> <strong>(a)</strong> Our active-vision platform consists of a 6-DoF observation arm equipped with a D435i camera and a 6-DoF Piper manipulation arm. <strong>(b)</strong> Representative execution sequences of Pepper Picking, Button Pressing, and Rack Cleaning under human-introduced occlusions, illustrating active viewpoint adjustment and manipulation.</figcaption>
           </figure>
         </div>
       </div>
@@ -228,13 +228,13 @@
           <p class="real-rollout-intro has-text-centered">Watch three physical robot tasks with or without an externally introduced occlusion.</p>
 
           <div class="real-task-grid" role="group" aria-label="Choose a physical robot task">
-            <button class="real-task-card" type="button" data-real-task="button_pressing" aria-pressed="false">
-              <img src="static/images/rollouts/real_button_pressing_occlusion.jpg" alt="Button pressing rollout preview" width="1280" height="720" loading="lazy">
-              <span>Button Pressing</span>
-            </button>
             <button class="real-task-card" type="button" data-real-task="pepper_picking" aria-pressed="false">
               <img src="static/images/rollouts/real_pepper_picking_occlusion.jpg?v=14s" alt="Pepper picking rollout preview" width="1280" height="720" loading="lazy">
               <span>Pepper Picking</span>
+            </button>
+            <button class="real-task-card" type="button" data-real-task="button_pressing" aria-pressed="false">
+              <img src="static/images/rollouts/real_button_pressing_occlusion.jpg" alt="Button pressing rollout preview" width="1280" height="720" loading="lazy">
+              <span>Button Pressing</span>
             </button>
             <button class="real-task-card" type="button" data-real-task="rack_cleaning" aria-pressed="true">
               <img src="static/images/rollouts/real_rack_cleaning_occlusion.jpg" alt="Rack cleaning rollout preview" width="1280" height="720" loading="lazy">
@@ -245,7 +245,7 @@
           <div class="real-condition-controls">
             <span class="rollout-control-label">Rollout</span>
             <div class="rollout-button-row" role="group" aria-label="Choose a physical robot rollout">
-              <button class="rollout-button" type="button" data-real-condition="occlusion" aria-pressed="true">Occlusion recovery</button>
+              <button class="rollout-button" type="button" data-real-condition="occlusion" aria-pressed="true">Stage Occlusion</button>
               <button class="rollout-button" type="button" data-real-condition="clean" aria-pressed="false">Clean</button>
             </div>
           </div>
