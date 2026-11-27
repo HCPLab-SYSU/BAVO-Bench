@@ -72,10 +72,23 @@
     .real-task-card:focus-visible { outline: 3px solid var(--primary-color); outline-offset: 3px; }
     .real-task-card img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
     .real-task-card span { display: block; padding: .7rem .9rem; }
-    .real-player-panel { max-width: 960px; margin: 0 auto; padding: 1.25rem; border: 1px solid var(--border-color); border-radius: var(--border-radius-lg); background: var(--background-secondary); box-shadow: var(--shadow-md); }
+    .real-player-panel { max-width: 1200px; margin: 0 auto; padding: 1.25rem; border: 1px solid var(--border-color); border-radius: var(--border-radius-lg); background: var(--background-secondary); box-shadow: var(--shadow-md); }
     .real-player-panel h3 { margin-bottom: .3rem !important; }
     .real-player-panel p { color: var(--text-secondary); margin-bottom: 1rem; }
+    .real-video-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .real-video-view { min-width: 0; }
+    .real-view-label { display: block; margin-bottom: .45rem; font-size: 1rem; font-weight: 700; color: var(--text-primary); }
     .real-rollout-player { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: .6rem; background: #111827; }
+    .real-playback-controls { display: flex; align-items: center; gap: .9rem; margin-top: 1rem; }
+    .real-playback-button { flex: none; min-width: 10rem; border: 0; border-radius: .5rem; padding: .7rem 1rem; background: var(--text-primary); color: white; font: inherit; font-weight: 700; cursor: pointer; }
+    .real-playback-button:hover:not(:disabled) { background: var(--primary-color); }
+    .real-playback-button:disabled { opacity: .55; cursor: wait; }
+    .real-playback-button:focus-visible, .real-timeline:focus-visible { outline: 3px solid var(--primary-color); outline-offset: 3px; }
+    .real-timeline { flex: 1; min-width: 0; accent-color: var(--primary-color); cursor: pointer; }
+    .real-timeline:disabled { cursor: wait; }
+    .real-time { flex: none; font-size: .9rem; font-variant-numeric: tabular-nums; color: var(--text-secondary); }
+    .real-sync-note { margin: .7rem 0 0 !important; font-size: .9rem; }
+    .real-visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
     @media (max-width: 600px) {
       .rollout-panel { padding: .75rem; }
       .rollout-button { font-size: .82rem; padding: .5rem .75rem; }
@@ -83,6 +96,10 @@
       .real-task-grid { grid-template-columns: 1fr; gap: .7rem; }
       .real-task-card { display: grid; grid-template-columns: 120px 1fr; align-items: center; }
       .real-player-panel { padding: .75rem; }
+      .real-video-grid { grid-template-columns: 1fr; gap: .8rem; }
+      .real-playback-controls { flex-wrap: wrap; gap: .5rem; }
+      .real-playback-button { width: 100%; }
+      .real-timeline { flex-basis: calc(100% - 6rem); }
     }
     .footer { font-size: .9rem; }
   </style>
@@ -225,19 +242,19 @@
       <div class="hero-body">
         <div class="container">
           <h2 class="title is-3 has-text-centered">Physical Robot Rollouts</h2>
-          <p class="real-rollout-intro has-text-centered">Watch three physical robot tasks with or without an externally introduced occlusion.</p>
+          <p class="real-rollout-intro has-text-centered">Watch synchronized third-person and active-camera views of three physical robot tasks. Choose a task and condition, then play or seek both views together.</p>
 
           <div class="real-task-grid" role="group" aria-label="Choose a physical robot task">
             <button class="real-task-card" type="button" data-real-task="pepper_picking" aria-pressed="false">
-              <img src="static/images/rollouts/real_pepper_picking_occlusion.jpg?v=14s" alt="Pepper picking rollout preview" width="1280" height="720" loading="lazy">
+              <img src="static/images/rollouts/pepper_picking_stage_third.jpg" alt="Pepper picking rollout preview" width="640" height="360" loading="lazy">
               <span>Pepper Picking</span>
             </button>
             <button class="real-task-card" type="button" data-real-task="button_pressing" aria-pressed="false">
-              <img src="static/images/rollouts/real_button_pressing_occlusion.jpg" alt="Button pressing rollout preview" width="1280" height="720" loading="lazy">
+              <img src="static/images/rollouts/button_pressing_stage_third.jpg" alt="Button pressing rollout preview" width="640" height="360" loading="lazy">
               <span>Button Pressing</span>
             </button>
             <button class="real-task-card" type="button" data-real-task="rack_cleaning" aria-pressed="true">
-              <img src="static/images/rollouts/real_rack_cleaning_occlusion.jpg" alt="Rack cleaning rollout preview" width="1280" height="720" loading="lazy">
+              <img src="static/images/rollouts/rack_cleaning_stage_third.jpg" alt="Rack cleaning rollout preview" width="640" height="360" loading="lazy">
               <span>Rack Cleaning</span>
             </button>
           </div>
@@ -245,18 +262,37 @@
           <div class="real-condition-controls">
             <span class="rollout-control-label">Rollout</span>
             <div class="rollout-button-row" role="group" aria-label="Choose a physical robot rollout">
-              <button class="rollout-button" type="button" data-real-condition="occlusion" aria-pressed="true">Stage Occlusion</button>
+              <button class="rollout-button" type="button" data-real-condition="stage" aria-pressed="true">Stage Occlusion</button>
               <button class="rollout-button" type="button" data-real-condition="clean" aria-pressed="false">Clean</button>
             </div>
           </div>
 
           <div class="real-player-panel">
             <h3 class="title is-4" id="real-rollout-title">Rack Cleaning</h3>
-            <p id="real-rollout-description" aria-live="polite">A physical robot rollout with an externally introduced occlusion.</p>
-            <video class="real-rollout-player" id="real-rollout-player" controls playsinline preload="none" poster="static/images/rollouts/real_rack_cleaning_occlusion.jpg" width="1280" height="720" aria-label="Rack Cleaning physical robot rollout with occlusion">
-              <source id="real-rollout-source" src="static/videos/real_rack_cleaning_occlusion.mp4" type="video/mp4">
-              Your browser does not support MP4 video.
-            </video>
+            <p id="real-rollout-description" aria-live="polite">Rack Cleaning under Stage Occlusion, shown from both cameras.</p>
+            <div class="real-video-grid">
+              <div class="real-video-view">
+                <span class="real-view-label">Third-person scene</span>
+                <video class="real-rollout-player" id="real-third-player" muted playsinline preload="metadata" poster="static/images/rollouts/rack_cleaning_stage_third.jpg" width="1280" height="720" aria-label="Rack Cleaning under Stage Occlusion, third-person view">
+                  <source id="real-third-source" src="static/videos/rack_cleaning_stage_third.mp4" type="video/mp4">
+                  Your browser does not support MP4 video.
+                </video>
+              </div>
+              <div class="real-video-view">
+                <span class="real-view-label">Active-camera view</span>
+                <video class="real-rollout-player" id="real-ego-player" muted playsinline preload="metadata" poster="static/images/rollouts/rack_cleaning_stage_ego.jpg" width="1280" height="720" aria-label="Rack Cleaning under Stage Occlusion, active-camera view">
+                  <source id="real-ego-source" src="static/videos/rack_cleaning_stage_ego.mp4" type="video/mp4">
+                  Your browser does not support MP4 video.
+                </video>
+              </div>
+            </div>
+            <div class="real-playback-controls" role="group" aria-label="Control both physical robot videos">
+              <button class="real-playback-button" id="real-playback-button" type="button" disabled>Loading videos</button>
+              <label class="real-visually-hidden" for="real-timeline">Seek both views</label>
+              <input class="real-timeline" id="real-timeline" type="range" min="0" max="1" step="0.01" value="0" disabled>
+              <span class="real-time" id="real-time" aria-live="off">0:00 / 0:00</span>
+            </div>
+            <p class="real-sync-note" id="real-sync-note" role="status" aria-live="polite">Both views start together. The shorter view holds its final frame while the other finishes.</p>
           </div>
         </div>
       </div>
